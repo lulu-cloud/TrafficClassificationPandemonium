@@ -1,0 +1,44 @@
+preprocess:
+#  npy_path: D:\xy12\app-net\npy_data\cic-2017\
+#  pcap_path: D:\cic-mal2017
+#  work_flow_path: D:\cic-mal2017-work-flow
+  traffic_path: ../traffic_path/android
+  datasets: ../datasets/android
+  pcap_path: D:\cic-mal2017
+  work_flow_path: D:\PyProject\vocation\sequence_payload_new_faction\data_work_tor
+
+  splitcap_path: D:\xy12\app-net\tool\SplitCap.exe
+  packet_num: 4
+  byte_num: 256
+  ip_length: 128
+  threshold: 4
+  train_size: 0.8 # 训练集所占比例
+  order: 3
+  bytes: 768
+  log_path: D:\xy12\app-net\traffic_log\log\preprocess.log
+
+train:
+  train_pay: D:\xy12\app-net\npy_data\cic-2017\pay.npy
+  # train_seq: ../npy_data/test/test/ip_length.npy
+  train_seq: D:\xy12\app-net\npy_data\cic-2017\seq.npy
+  train_sta: D:\xy12\app-net\npy_data\cic-2017\sta.npy
+  train_label: D:\xy12\app-net\npy_data\cic-2017\label.npy
+  test_pay: /home/xl/app-net/npy_data/test/test/pay_load.npy
+  test_seq: /home/xl/app-net/npy_data/test/test/sig.npy
+  test_sta: /home/xl/app-net/npy_data/test/test/statistic.npy
+  test_label: /home/xl/app-net/npy_data/test/test/label.npy
+  BATCH_SIZE: 128
+  epochs: 50 # 训练的轮数
+  lr: 0.001 # learning rate
+  model_dir: /home/xl/app-net/checkpoint # 模型保存的文件夹
+  model_name: res-net-lstm.pth # 模型的名称
+  model_name_1: res-net-ae.pth # 模型的名称
+  model_name_2: ae-lstm.pth # 模型的名称
+  model_name_3: cnn1d.pth
+  
+
+
+test:
+  evaluate: True # 如果是 True, 则不进行训练, 只进行评测
+  pretrained: True # 是否有训练好的模型# # # {'Chat': 0, 'Email': 1, 'FT': 2, 'P2P': 3, 'Streaming': 4, 'VoIP': 5, 'VPN_Chat': 6, 'VPN_Email': 7, 'VPN_FT': 8, 'VPN_P2P': 9, 'VPN_Streaming': 10, 'VPN_VoIP': 11}
+  label2index: {'qq': 0, '微信': 1, '淘宝': 2}
