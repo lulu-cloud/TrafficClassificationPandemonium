@@ -85,7 +85,7 @@ def get_pay_seq(pcap, threshold, ip_length, n, m):
 
 
 def getPcapIPLength(pcap_folder, threshold, ip_length, packet_num, byte_num):
-    """提取序列长度，与前packet_num个报文的前byte_num字节"""
+    """提取序列长度，与前packet_num个报文的前byte_num字节,当流序列长度小于threshold忽略该流"""
     label2num = {}
     class_num = 0
     pay_list = []
