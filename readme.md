@@ -30,7 +30,7 @@
 
    其中对于前`packet_num`个包的前`byte_num`字节可以如图说明
 
-   ![image-20240304172008854](D:\Blog\github\hexo\source\_posts\assets\image-20240304172008854.png)
+   ![image-20240304172008854](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403041802884.png)
 
    负载、包长均作了舍长补短的操作，以达到特定的格式。
 
