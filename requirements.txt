@@ -1,0 +1,9 @@
+easydict==1.10
+flowcontainer==4.4
+matplotlib==3.5.3
+numpy==1.21.6
+pandas==1.3.5
+PyYAML==6.0
+scikit_learn==1.0.2
+scipy==1.7.3
+torch==1.13.1
