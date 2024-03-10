@@ -151,7 +151,7 @@
 
 2. **增加**了基于`cic-meterflower`工具对pcap的处理，将pcap处理为csv格式文件
 
-> 使用`entry.pcap2csv/1_preprocess_with_cic.py`,参考博客[流量预处理-3：利用cic-flowmeter工具提取流量特征]([流量预处理-3：利用cic-flowmeter工具提取流量特征_cicflowmeter-CSDN博客](https://blog.csdn.net/qq_45125356/article/details/134921593?spm=1001.2014.3001.5501))修改相应的路径变量
+> 使用`entry/pcap2csv/1_preprocess_with_cic.py`,参考博客[流量预处理-3：利用cic-flowmeter工具提取流量特征]([流量预处理-3：利用cic-flowmeter工具提取流量特征_cicflowmeter-CSDN博客](https://blog.csdn.net/qq_45125356/article/details/134921593?spm=1001.2014.3001.5501))修改相应的路径变量
 >
 > 注意：pcap路径与名称在使用该方式处理时不能出现中文，否则报错。
 
