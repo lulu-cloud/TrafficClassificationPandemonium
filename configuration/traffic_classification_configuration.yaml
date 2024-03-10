@@ -1,12 +1,16 @@
 preprocess:
-  traffic_path: ../traffic_path/android # 原始pcap的路径
-  datasets: ../datasets/android # 预处理后npy文件的路径
+  traffic_path: D:\PyProject\TrafficClassificationPandemonium\traffic_path\android # 原始pcap的路径
   packet_num: 4 # 负载特征参数：流的前4包的负载
   byte_num: 256 # 负载特征参数：每个包的前256个字节
   ip_length: 128 # 包长特征参数：提取流前128个包长序列
   threshold: 4 # 阈值：流包长小于4时舍弃
   train_size: 0.8 # 训练集所占比例
-
+  flowcontainer:
+    datasets: D:\PyProject\TrafficClassificationPandemonium\datasets\flowcontainer\android # 预处理后npy文件的路径
+  splitCap_1:
+    datasets: D:\PyProject\TrafficClassificationPandemonium\datasets\splitCap1\android # 预处理后npy文件的路径
+    work_flow_path: D:\PyProject\TrafficClassificationPandemonium\pcap_flow_dir\android
+    splitCap_exe_path: D:\PyProject\TrafficClassificationPandemonium\tool\SplitCap.exe # splitCap的路径
 
 train:
   train_pay: /home/xl/TrafficClassificationPandemonium/datasets/android/train/pay_load.npy
