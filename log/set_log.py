@@ -26,4 +26,4 @@ def init_logger(log_path):
 
     return logger
 
-logger = init_logger(r"/home/xl/TrafficClassificationPandemonium/log/log_file/all.log")
+logger = init_logger(r"D:\PyProject\TrafficClassificationPandemonium\log\log_file\all.log")
