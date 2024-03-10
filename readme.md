@@ -123,3 +123,38 @@
 - **切换模型**：在`entry/2_train_test_model.py`的20/21行进行导入切换即可,下图为一维卷积与appnet的切换示例
 
   ![image-20240304173853711](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403041745627.png)
+
+## 更新日志
+
+### 3/10号更新
+
+#### 流量预处理更新
+
+1. **增加**了基于`splitCap.exe`分流预处理，并且除了提取负载与包长序列后，支持提取统计特征（26维度）。
+
+   26维度统计分别为
+
+   ~~~
+   "Avg_syn_flag", "Avg_urg_flag", "Avg_fin_flag", "Avg_ack_flag", "Avg_psh_flag", "Avg_rst_flag", "Avg_DNS_pkt", "Avg_TCP_pkt",
+           "Avg_UDP_pkt", "Avg_ICMP_pkt", "Duration_window_flow", "Avg_delta_time", "Min_delta_time", "Max_delta_time", "StDev_delta_time",
+           "Avg_pkts_lenght", "Min_pkts_lenght", "Max_pkts_lenght", "StDev_pkts_lenght", "Avg_small_payload_pkt", "Avg_payload", "Min_payload",
+           "Max_payload", "StDev_payload", "Avg_DNS_over_TCP", "Num_pkts"
+   ~~~
+
+   > 从`entry.pcap2npy/1_preprocess_with_splitCap_1.py`进入
+   >
+   > **配置文件preprocess下路径要为windows格式**
+
+运行完的预览图，可以看到有`statistic.npy`的统计特征文件
+
+![image-20240310121828598](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403101242156.png)
+
+2. **增加**了基于`cic-meterflower`工具对pcap的处理，将pcap处理为csv格式文件
+
+> 使用`entry.pcap2csv/1_preprocess_with_cic.py`,参考博客[流量预处理-3：利用cic-flowmeter工具提取流量特征]([流量预处理-3：利用cic-flowmeter工具提取流量特征_cicflowmeter-CSDN博客](https://blog.csdn.net/qq_45125356/article/details/134921593?spm=1001.2014.3001.5501))修改相应的路径变量
+>
+> 注意：pcap路径与名称在使用该方式处理时不能出现中文，否则报错。
+
+运行完的预览图，可以看到已经对中文进行改名，出现各个标签的csv文件
+
+![image-20240310121944730](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403101242153.png)
