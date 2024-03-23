@@ -6,12 +6,18 @@
 """
 @Description: APP_Net模型
 """
+import sys
 
+import os
+
+# 把当前文件所在文件夹的父文件夹路径加入到PYTHONPATH
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch
 import torch.nn as nn
+from models.base_model import BaseModel
 
 
-class APP_Net(nn.Module):
+class APP_Net(BaseModel):
     def __init__(self, input_size = 1, hidden_size = 256, num_layers = 2, bidirectional = True, num_classes=12):
         super(APP_Net, self).__init__()
         # rnn配置
@@ -64,6 +70,7 @@ class APP_Net(nn.Module):
         )
 
     def forward(self, x_payload, x_sequence,x_sta):
+        x_payload, x_sequence, x_sta = self.data_trans(x_payload, x_sequence, x_sta)
         x_payload = self.cnn(x_payload)
         x_sequence = self.rnn(x_sequence)
         x_sequence = x_sequence[0][:, -1, :]
@@ -73,6 +80,9 @@ class APP_Net(nn.Module):
         else:
             x = self.classifier(x)
         return x,None
+
+    def data_trans(self,x_payload, x_sequence,x_sta):
+        return x_payload, x_sequence,x_sta
 
 
 def app_net(model_path, pretrained=False, **kwargs):

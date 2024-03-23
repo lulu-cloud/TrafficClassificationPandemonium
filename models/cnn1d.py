@@ -10,8 +10,8 @@
 
 import torch
 import torch.nn as nn
-import netron
-class Cnn1d(nn.Module):
+from models.base_model import BaseModel
+class Cnn1d(BaseModel):
     def __init__(self, num_classes=12):
         super(Cnn1d, self).__init__()
         # 卷积层+池化层
@@ -37,14 +37,17 @@ class Cnn1d(nn.Module):
             nn.Dropout(0.5),
             nn.Linear(in_features=1024, out_features=num_classes)
         )
+    
     def forward(self, pay,seq,sta):
-        # x = x.view(x.size(0),1,-1) # 将图片摊平
+        pay,seq,sta = self.data_trans(pay,seq,sta)
         pay = self.features(pay) # 卷积层, 提取特征
         # print(x.shape)
         # x = x.view(x.size(0), -1) # 展开
         pay = self.classifier(pay) # 分类层, 用来分类
         return pay,None
-
+    
+    def data_trans(self,x_payload, x_sequence,x_sta):
+        return x_payload, x_sequence,x_sta
 def cnn1d(model_path, pretrained=False, **kwargs):
     """
     CNN 1D model architecture
