@@ -8,9 +8,9 @@
 ## 1 项目简介
 &emsp;&emsp;该项目是**流量预处理**与**分类验证**的一个统一实现，力求使用清晰的项目结构与最少的代码实现预设功能，目前支持的模型只有`1dcnn`、`app-net`两种，后续会进行更新。代码已经开源至[露露云的github](https://github.com/lulu-cloud/TrafficClassificationPandemonium)，如果能帮助你，就**给鼠鼠点一个star吧**！！！
 
-&emsp;&emsp;[我的CSDN博客]([烟玉蓝田-CSDN博客](https://blog.csdn.net/qq_45125356?spm=1001.2101.3001.5343))
+&emsp;&emsp;[我的CSDN博客](https://blog.csdn.net/qq_45125356?spm=1001.2101.3001.5343)
 
-&emsp;&emsp;[我的Github Page博客]([lulu-cloud](https://lulu-cloud.github.io/))
+&emsp;&emsp;[我的Github Page博客](https://lulu-cloud.github.io/)
 
 
 
