@@ -18,19 +18,19 @@
 
 import torch
 import torch.nn as nn
-from abc import ABC,abstractmethod
+from abc import ABC, abstractmethod
+
 
 class BaseModel(nn.Module):
     def __init__(self):
         super(BaseModel, self).__init__()
 
     @abstractmethod
-    def forward(self, x_payload, x_sequence,x_sta):
-        x_payload, x_sequence, x_sta = self.data_trans(x_payload, x_sequence,x_sta)
+    def forward(self, x_payload, x_sequence, x_sta):
+        x_payload, x_sequence, x_sta = self.data_trans(x_payload, x_sequence, x_sta)
         # 第一个是分类结果，第二个是重构结果
-        return None,None
+        return None, None
+
     @abstractmethod
-    def data_trans(self,x_payload, x_sequence,x_sta):
+    def data_trans(self, x_payload, x_sequence, x_sta):
         pass
-
-
