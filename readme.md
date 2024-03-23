@@ -124,11 +124,11 @@
 
   ![image-20240304173853711](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403041745627.png)
 
-## 更新日志
+# 更新日志
 
-### 3/10号更新
+## 3/10日更新
 
-#### 流量预处理更新
+### 流量预处理更新
 
 1. **增加**了基于`splitCap.exe`分流预处理，并且除了提取负载与包长序列后，支持提取统计特征（26维度）。
 
@@ -158,3 +158,40 @@
 运行完的预览图，可以看到已经对中文进行改名，出现各个标签的csv文件
 
 ![image-20240310121944730](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403101242153.png)
+
+## 3/23日更新
+
+### 模型结构更新
+
+&emsp;&emsp;当前更新对运行项目是无影响的，也就是说如果你是仅仅使用项目而不进行扩展的话，此处更新是透明的，对当前仓库版本的代码可以不进行同步。
+&emsp;&emsp;代码已经推送开源至[露露云的github](https://github.com/lulu-cloud/TrafficClassificationPandemonium)，如果能帮助你，就**给鼠鼠点一个star吧！！！**
+
+> **简要**：**由原先各个模型独立抽象出了一个`base_model`模型基类，由该基类继承`nn.Module`类，定义抽象方法`forward`与`data_trans`，方便不同模型进行各自的数据变换**
+
+1. 为什么要改？
+
+   > `dataloader`给模型输入的数据格式是固定死的，给每一个模型设定不同的`dataloader`违背了项目`多个模型统一代码`原则，而不同模型对于数据的输入样式是不同的，为了适用于之后会加入项目的模型，抽象出一个基类，设定一个`data_trans`抽象方法，每一个模型都根据模型的输入去实现该方法即可，这样做到了不更改`dataloader`的目的，做到代码复用
+
+2. `dataloader`给定的数据样式?
+
+   > 分析日志可以给出以下各个维度下`dataloader`给定的数据`shape`
+   >
+   > ~~~bash
+   > [2024-03-23 17:19:38,802 INFO] 是否使用 GPU 进行训练, cuda
+   > [2024-03-23 17:19:44,781 INFO] 成功初始化模型.
+   > [2024-03-23 17:19:44,814 INFO] pcap 文件大小, torch.Size([404, 1, 1024]); seq文件大小:torch.Size([404, 128, 1]); sta文件大小: torch.Size([404, 1024]); label 文件大小: torch.Size([404])
+   > [2024-03-23 17:19:44,851 INFO] pcap 文件大小, torch.Size([404, 1, 1024]); seq文件大小:torch.Size([404, 128, 1]); sta文件大小: torch.Size([404, 1024]); label 文件大小: torch.Size([404])
+   > [2024-03-23 17:19:44,851 INFO] 成功加载数据集.
+   > ~~~
+   >
+   > 负载pay: [batch_size,1,m*n]
+   >
+   > 包长seq: [batch_size,seq_len,1]
+   >
+   > 统计sta: [batch_size,sta_len]
+   >
+   > - m*n是预处理的前m个包的前n个字节，这里目前写的是4\*256也就是1024
+   > - seq_len是预处理的前ip_length个包长，这里目前是128
+   > - sta_len是预处理的统计维度，在10号更新的数据下是26
+
+   
