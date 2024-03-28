@@ -202,3 +202,142 @@
 
    
 
+## 3/28日更新
+
+### 增加模型二维卷积神经网络CNN2d
+
+1. 由于前期中的使用`继承`改善了模型结构，这里只需要写一个py文件就可以了
+
+   ~~~py
+   """
+   @Description: 二维卷积神经网络
+   """
+   from math import sqrt
+   
+   import torch
+   import torch.nn as nn
+   from models.base_model import BaseModel
+   
+   
+   class Cnn2d(BaseModel):
+       def __init__(self, num_classes=12):
+           super(Cnn2d, self).__init__()
+           # 卷积层+池化层
+           self.features = nn.Sequential(
+               nn.Conv2d(kernel_size=5,in_channels=1,out_channels=32,stride=1,padding=2), # b,32,32,32
+               nn.MaxPool2d(kernel_size=2), # b,32,16,16
+               nn.Conv2d(kernel_size=5,in_channels=32,out_channels=64,stride=1,padding=2), # b,64,16,16
+               nn.MaxPool2d(kernel_size=2), # b,64,8,8
+           )
+           # 全连接层
+           self.classifier = nn.Sequential(
+               # 29*64
+               nn.Flatten(),
+               nn.Linear(in_features=64 * 64, out_features=1024),  # 1024:64*64
+               nn.Dropout(0.5),
+               nn.Linear(in_features=1024, out_features=num_classes)
+           )
+   
+       def forward(self, pay, seq, sta):
+           pay, seq, sta = self.data_trans(pay, seq, sta)
+   
+           pay = self.features(pay)  # 卷积层, 提取特征
+           pay = self.classifier(pay)  # 分类层, 用来分类
+           return pay, None
+   
+       def data_trans(self, x_payload, x_sequence, x_sta):
+           # 转换
+           x_0,x_1,x_2 = x_payload.shape[0],x_payload.shape[1],x_payload.shape[2]
+           x_payload = x_payload.reshape(x_0,x_1,int(sqrt(x_2)),int(sqrt(x_2)))
+           return x_payload, x_sequence, x_sta
+   
+   
+   def cnn2d(model_path, pretrained=False, **kwargs):
+       """
+       CNN 1D model architecture
+   
+       Args:
+           pretrained (bool): if True, returns a model pre-trained model
+       """
+       model = Cnn2d(**kwargs)
+       if pretrained:
+           checkpoint = torch.load(model_path)
+           model.load_state_dict(checkpoint['state_dict'])
+       return model
+   
+   
+   def main():
+       a = sqrt(1024)
+       x_pay = torch.rand(8,1,1024)
+       cnn = Cnn2d()
+       x = cnn(x_pay,x_pay,x_pay)
+   
+   if __name__=="__main__":
+       main()
+   ~~~
+
+   > 模型结构：
+   >
+   > 两个卷积+池化的组合，卷积核大小都是5X5，池化层的核大小都是2X2
+
+2. 在`train_test_model.py`中，改动
+
+   ~~~py
+   from utils.set_config import setup_config
+   # from models.cnn1d import cnn1d as train_model
+   # from models.app_net import app_net as train_model
+   from models.cnn2d import cnn2d as train_model
+   ~~~
+
+   ![image-20240328212456471](D:\PyProject\TrafficClassificationPandemonium\assets\image-20240328212456471.png)
+
+即可！
+
+3. 开始训练！
+
+   ~~~bash
+   [2024-03-28 21:20:53,317 INFO] Epoch: [47][2/4], Loss 0.0001 (0.0005), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:53,345 INFO] Epoch: [47][3/4], Loss 0.0000 (0.0005), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:53,544 INFO]  * Prec@1 100.000
+   [2024-03-28 21:20:53,716 INFO] Epoch: [48][1/4], Loss 0.0001 (0.0002), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:53,723 INFO] Epoch: [48][3/4], Loss 0.0000 (0.0003), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,066 INFO] Epoch: [48][0/4], Loss 0.0000 (0.0000), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,105 INFO] Epoch: [48][1/4], Loss 0.0014 (0.0007), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,146 INFO] Epoch: [48][2/4], Loss 0.0001 (0.0005), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,153 INFO] Epoch: [48][3/4], Loss 0.0000 (0.0005), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,331 INFO]  * Prec@1 100.000
+   [2024-03-28 21:20:54,537 INFO] Epoch: [49][1/4], Loss 0.0080 (0.0055), Prec@1 99.219 (99.609)
+   [2024-03-28 21:20:54,558 INFO] Epoch: [49][3/4], Loss 0.0000 (0.0058), Prec@1 100.000 (99.505)
+   [2024-03-28 21:20:54,880 INFO] Epoch: [49][0/4], Loss 0.0000 (0.0000), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,929 INFO] Epoch: [49][1/4], Loss 0.0001 (0.0001), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,970 INFO] Epoch: [49][2/4], Loss 0.0013 (0.0005), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:54,982 INFO] Epoch: [49][3/4], Loss 0.0000 (0.0005), Prec@1 100.000 (100.000)
+   [2024-03-28 21:20:55,147 INFO]  * Prec@1 100.000
+   ~~~
+
+4. 修改测试文件切换为测试模式
+
+   ~~~bash
+   Model Classification report:
+   [2024-03-28 21:26:19,166 INFO] ------------------------------
+   [2024-03-28 21:26:19,172 INFO]               precision    recall  f1-score   support
+   
+             qq       1.00      1.00      1.00        90
+             微信       1.00      1.00      1.00       206
+             淘宝       1.00      1.00      1.00       108
+   
+       accuracy                           1.00       404
+      macro avg       1.00      1.00      1.00       404
+   weighted avg       1.00      1.00      1.00       404
+   
+   [2024-03-28 21:26:19,175 INFO] 
+   Prediction Confusion Matrix:
+   [2024-03-28 21:26:19,175 INFO] ------------------------------
+   [2024-03-28 21:26:19,845 INFO]            Predicted:          
+                      qq   微信   淘宝
+   Actual: qq         90    0    0
+           微信          0  206    0
+           淘宝          0    0  108
+   ~~~
+
+   
