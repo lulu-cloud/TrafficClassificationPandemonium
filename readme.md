@@ -289,7 +289,7 @@
    from models.cnn2d import cnn2d as train_model
    ~~~
 
-   ![image-20240328212456471](D:\PyProject\TrafficClassificationPandemonium\assets\image-20240328212456471.png)
+   ![image-20240328212456471](https://raw.githubusercontent.com/lulu-cloud/lili_images/main/image/202403282130327.png)
 
 即可！
 
