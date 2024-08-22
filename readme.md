@@ -41,6 +41,9 @@
    负载、包长均作了舍长补短的操作，以达到特定的格式。
 
 2. **预处理脚本运行**：
+   
+   > 环境说明：
+   > python最好使用3.7版本， 否则安装numpy==1.21.6， 否则容易有报错
 
    配置`yaml_path`即配置文件路径，然后运行代码`entry/1_preprocess_with_flowcontainer.py`
 
