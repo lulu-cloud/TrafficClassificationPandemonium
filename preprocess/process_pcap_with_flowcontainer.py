@@ -12,7 +12,7 @@ from log.set_log import init_logger
 from flowcontainer.extractor import extract
 import numpy as np
 
-logger = init_logger(log_path= '../log/log_file/preprocess-flowcontainer.log')
+logger = init_logger(log_path= r'W:\traffic classify\TrafficClassificationPandemonium\log\log_file\preprocess-flowcontainer.log')
 
 def hex_to_dec(hex_str, target_length):
     dec_list = []
@@ -98,8 +98,14 @@ def getPcapIPLength(pcap_folder, threshold, ip_length, packet_num, byte_num):
             # 遍历每一个pcap,提取前packet_num个包的byte_num字节
             pcap = os.path.join(label_path, pcap)
             # 生成ip长度序列seq与负载数据pay
-            pay, seq = get_pay_seq(pcap, threshold, ip_length, packet_num, byte_num)
-
+            try:
+                pay, seq = get_pay_seq(pcap, threshold, ip_length, packet_num, byte_num)
+                assert pay.shape[0] == seq.shape[0]
+            except Exception as e:
+                logger.exception(e)
+                min_length = min(pay.shape[0], seq.shape[0])
+                pay = pay[:min_length, :]
+                seq = seq[:min_length, :]
             label = np.full((seq.shape[0],), class_num)
             pay_list.extend(pay)
             seq_list.extend(seq)
@@ -116,7 +122,12 @@ def getPcapIPLength(pcap_folder, threshold, ip_length, packet_num, byte_num):
     for (key, value) in label2num.items():
         num2label[value] = key
     logger.info("序号与标签的对应关系:{}".format(num2label))
-
+    logger.info("pay_list shape:{}".format(pay_list.shape))
+    logger.info("seq_list shape:{}".format(seq_list.shape))
+    logger.info("label_list shape:{}".format(label_list.shape))
+    np.save("./pay_list.npy", pay_list)
+    np.save("./seq_list.npy", seq_list)
+    np.save("./label_list.npy", label_list)
     return pay_list, seq_list, label_list
 
 
